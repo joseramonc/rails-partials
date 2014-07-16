@@ -1,6 +1,6 @@
 # rails-partials package
 
-Easily create partials for your rails application.
+An Atom package to easily create partials for your ruby on rails application.
 
 ## Installation
 
@@ -16,6 +16,6 @@ You can install the latest rails-partials version manually from console:
     npm install
     # Then restart Atom editor.
 
-![Demo](http://cl.ly/image/1H0u042U3X3M/instacodes.gif)
+![Demo](http://cl.ly/image/3K10363K3Y2M/railspartials.gif)
 
 Please report any problems or suggestions at [issue tracker](https://github.com/joseramonc/rails-partials/issues/new).

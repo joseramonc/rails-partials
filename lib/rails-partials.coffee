@@ -24,5 +24,5 @@ module.exports =
         # console.log 'file name: _' + text + '.html.erb'
         fs.open "#{editor_path}/_#{text}.html.erb", 'wx', (err, fd)->
           fs.write fd, selection
-          editor.open
-        editor.deleteToEndOfLine()
+          # editor.open
+        editor.insertText('<%= render "' + text + '" %>')
