@@ -16,6 +16,6 @@ You can install the latest rails-partials version manually from console:
     npm install
     # Then restart Atom editor.
 
-![Demo](http://cl.ly/image/3K10363K3Y2M/railspartials.gif)
+![Demo](http://cl.ly/image/0b1j3t0c1T1k/railsdemo.gif)
 
 Please report any problems or suggestions at [issue tracker](https://github.com/joseramonc/rails-partials/issues/new).
