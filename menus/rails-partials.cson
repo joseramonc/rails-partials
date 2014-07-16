@@ -1,0 +1,16 @@
+# See https://atom.io/docs/latest/creating-a-package#menus for more details
+'context-menu':
+  '.overlayer':
+      'Generate partial from selection': 'rails-partials:generate'
+
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'rails-partials'
+      'submenu': [
+        { 'label': 'Generate Partial', 'command': 'rails-partials:generate' }
+      ]
+    ]
+  }
+]
