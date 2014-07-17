@@ -15,7 +15,6 @@ module.exports =
     editor = atom.workspace.getActiveEditor()
     selection = editor.getSelection().getText()
     editorPath = path.dirname(editor.getPath())
-    that = @
     prompt.show
       label: 'Partial Name (No _ at the begginng or file extensions)',
       editor: editor,
@@ -28,7 +27,11 @@ module.exports =
         partialName = "_#{fileName}.html#{@editorExtension()}"
         fs.open "#{editorPath}/#{partialName}", 'wx', (err, fd) ->
           fs.write fd, selection
-        editor.insertText(@renderInstruction(fileName))
+        editor.insertText(@renderInstruction(fileName), autoIndent: true)
+        partialEditor = atom.workspace.open "#{editorPath}/#{partialName}"
+        # open is async so we have to wait for it to open to select all and indent
+        # partialEditor.selectAll()
+        # partialEditor.IndentSelection()
 
   editorExtension: ->
     fileName = atom.workspace.getActiveEditor().getTitle()
@@ -37,9 +40,8 @@ module.exports =
   removeUnusefulSymbols: (text) ->
     text = S(text).chompLeft '_' # starting underscore
     # remove present known extensions
-    text = S(text).chompLeft '.erb'
-    text = S(text).chompLeft '.haml'
-    # html
+    text = S(text).chompRight '.erb'
+    text = S(text).chompRight '.haml'
     text = S(text).chompRight '.html'
     text.s
 

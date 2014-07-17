@@ -2,6 +2,8 @@
 
 An Atom package to easily create partials for your ruby on rails application.
 
+Support for `.erb` and `.haml` files.
+
 ## Installation
 
 In Atom, open Preferences > Packages, search for rails-partials package. Once it found, click Install button to install package.
