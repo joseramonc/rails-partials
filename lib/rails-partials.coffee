@@ -19,17 +19,19 @@ module.exports =
     prompt.show
       label: 'Partial Name (No _ at the begginng or file extensions)',
       editor: editor,
+      removeUnusefulSymbols: @removeUnusefulSymbols,
+      editorExtension: @editorExtension,
+      renderInstruction: @renderInstruction,
       editorView: editor.editorView,
-      confirm: (partialName) ->
-        partialName = that.removeUnusefulSymbols(partialName)
-        # console.log 'file name: _' + partialName + '.html.erb'
-        fs.open "#{editorPath}/_#{partialName}.html#{that.partialExtension()}", 'wx', (err, fd) ->
+      confirm: (input) ->
+        fileName = @removeUnusefulSymbols(input)
+        partialName = "_#{fileName}.html#{@editorExtension()}"
+        fs.open "#{editorPath}/#{partialName}", 'wx', (err, fd) ->
           fs.write fd, selection
-        editor.insertText(that.renderInstruction(partialName))
+        editor.insertText(@renderInstruction(fileName))
 
-  partialExtension: ->
+  editorExtension: ->
     fileName = atom.workspace.getActiveEditor().getTitle()
-    console.log(path.extname(fileName))
     path.extname fileName
 
   removeUnusefulSymbols: (text) ->
@@ -42,7 +44,7 @@ module.exports =
     text.s
 
   renderInstruction: (partialName) ->
-    if @partialExtension() == ".haml"
+    if @editorExtension() == ".haml"
       "= render \"#{partialName}\""
     else
       "<%= render \"#{partialName}\" %>"
