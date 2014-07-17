@@ -11,9 +11,8 @@ class PromptView extends View
   @attach: -> new PromptView
 
   @content: ->
-    @div class: 'emmet-prompt mini', =>
-      # @label class: 'emmet-prompt__label', outlet: 'label'
-      @div class: 'emmet-prompt__input', =>
+    @div class: 'mini', =>
+      @div class: 'rails-partials-prompt__input', =>
         @subview 'panelInput', new EditorView(mini: true)
 
   initialize: () ->
@@ -39,7 +38,7 @@ class PromptView extends View
 
   confirm: ->
     @trigger 'confirm'
-    text = @remove_underscore_and_extensions @panelEditor.getText()
+    text = @removeUnderscoreAndExtensions @panelEditor.getText()
     method(@delegate, 'confirm')(text)
     @detach()
 
@@ -53,7 +52,7 @@ class PromptView extends View
     @trigger 'detach'
     method(@delegate, 'hide')()
 
-  remove_underscore_and_extensions: (text) ->
+  removeUnderscoreAndExtensions: (text) ->
     text = S(text).chompLeft '_'
     text = S(text).chompRight '.erb'
     text = S(text).chompRight '.html'

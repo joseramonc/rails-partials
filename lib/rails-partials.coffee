@@ -14,7 +14,7 @@ module.exports =
   generate: ->
     editor = atom.workspace.getActiveEditor()
     selection = editor.getSelection().getText()
-    editor_path = path.dirname(editor.getPath())
+    editorPath = path.dirname(editor.getPath())
 
     prompt.show
       label: 'Partial Name (No _ at the begginng or extensions needed)',
@@ -22,7 +22,6 @@ module.exports =
       editorView: editor.editorView,
       confirm: (text) ->
         # console.log 'file name: _' + text + '.html.erb'
-        fs.open "#{editor_path}/_#{text}.html.erb", 'wx', (err, fd)->
+        fs.open "#{editorPath}/_#{text}.html.erb", 'wx', (err, fd)->
           fs.write fd, selection
-          # editor.open
         editor.insertText('<%= render "' + text + '" %>')
