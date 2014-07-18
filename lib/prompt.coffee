@@ -38,7 +38,8 @@ class PromptView extends View
 
   confirm: ->
     @trigger 'confirm'
-    text = @removeUnderscoreAndExtensions @panelEditor.getText()
+    text = @panelEditor.getText()
+    #validation of text would go here...
     method(@delegate, 'confirm')(text)
     @detach()
 
@@ -51,9 +52,3 @@ class PromptView extends View
     super
     @trigger 'detach'
     method(@delegate, 'hide')()
-
-  removeUnderscoreAndExtensions: (text) ->
-    text = S(text).chompLeft '_'
-    text = S(text).chompRight '.erb'
-    text = S(text).chompRight '.html'
-    text.s
