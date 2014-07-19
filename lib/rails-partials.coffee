@@ -1,6 +1,5 @@
 path = require 'path'
 S = require 'string'
-fs = require 'fs-plus'
 
 PromptView = require './prompt'
 prompt = new PromptView()
@@ -29,15 +28,11 @@ module.exports =
         directory = @fileDirectory(input)
         fileName = @fileName(input)
         partialName = "_#{fileName}.html#{@editorExtension()}"
-        fileFullPath = "#{directory}/#{partialName}"
-        unless fs.isFileSync(fileFullPath)
-          editor.insertText(@renderInstruction(@inputPath(input)), autoIndent: true)
-          promise = atom.workspace.open fileFullPath
-          promise.then (partialEditor) ->
-            partialEditor.insertText(selection, autoIndent: true)
-            partialEditor.saveAs("#{directory}/#{partialName}")
-        else
-          console.log 'exists dummy'
+        editor.insertText(@renderInstruction(@inputPath(input)), autoIndent: true)
+        promise = atom.workspace.open "#{directory}/#{partialName}"
+        promise.then (partialEditor) ->
+          partialEditor.insertText(selection, autoIndent: true)
+          partialEditor.saveAs("#{directory}/#{partialName}")
 
   fileDirectory: (input) ->
     if S(input).contains('/')

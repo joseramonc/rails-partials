@@ -1,5 +1,6 @@
 {$, EditorView, View} = require 'atom'
 S = require 'string'
+fs = require 'fs-plus'
 
 noop = ->
 
@@ -13,6 +14,8 @@ class PromptView extends View
   @content: ->
     @div class: 'mini', =>
       @div class: 'rails-partials-prompt__input', =>
+        @div class: 'feedback hide', =>
+          @p class: 'error', 'Already exists'
         @subview 'panelInput', new EditorView(mini: true)
 
   initialize: () ->
@@ -40,8 +43,16 @@ class PromptView extends View
     @trigger 'confirm'
     text = @panelEditor.getText()
     #validation of text would go here...
-    method(@delegate, 'confirm')(text)
-    @detach()
+    directory = @delegate.fileDirectory(text)
+    fileName = @delegate.fileName(text)
+    partialName = "_#{fileName}.html#{@delegate.editorExtension()}"
+    fileFullPath = "#{directory}/#{partialName}"
+    unless fs.isFileSync(fileFullPath)
+      method(@delegate, 'confirm')(text)
+      @detach()
+    else
+      console.log 'exists poo poo face'
+      @showError 'File already exists'
 
   cancel: ->
     @trigger 'cancel'
@@ -52,3 +63,6 @@ class PromptView extends View
     super
     @trigger 'detach'
     method(@delegate, 'hide')()
+  
+  showError: (message='') ->
+    @panelInput.find('.feedback').show()
