@@ -12,11 +12,10 @@ class PromptView extends View
   @attach: -> new PromptView
 
   @content: ->
-    @div class: 'mini', =>
+    @div class: 'overlay from-top', =>
       @div class: 'rails-partials-prompt__input', =>
-        @div class: 'feedback hide', =>
-          @p class: 'error', 'Already exists'
         @subview 'panelInput', new EditorView(mini: true)
+        @div class: 'error-message', outlet: 'errorMessage'
 
   initialize: () ->
     @panelEditor = @panelInput.getEditor()
@@ -63,6 +62,7 @@ class PromptView extends View
     super
     @trigger 'detach'
     method(@delegate, 'hide')()
-  
+
   showError: (message='') ->
-    @panelInput.find('.feedback').show()
+    @errorMessage.text(message)
+    @flashError() if message
