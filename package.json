@@ -12,6 +12,7 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
-    "string": ">= 1.9.0"
+    "string": ">= 1.9.0",
+    "fs-plus": ">= 2.2.2"
   }
 }
