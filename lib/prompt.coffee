@@ -34,7 +34,6 @@ class PromptView extends View
     # atom.workspaceView.append(this)
     atom.workspaceView.prependToBottom(this)
     @panelInput.focus()
-    @panelInput.setText('')
     @trigger 'attach'
     method(@delegate, 'show')()
 
@@ -50,7 +49,6 @@ class PromptView extends View
       method(@delegate, 'confirm')(text)
       @detach()
     else
-      console.log 'exists poo poo face'
       @showError 'File already exists'
 
   cancel: ->
@@ -59,7 +57,9 @@ class PromptView extends View
     @detach()
 
   detach: ->
+    @panelInput.setText('')
     super
+    @showError ''
     @trigger 'detach'
     method(@delegate, 'hide')()
 
