@@ -1,6 +1,6 @@
 # rails-partials package
 
-An Atom package to easily create partials for your ruby on rails application.
+An [Atom package](https://atom.io/packages/rails-partials) to easily create partials for your ruby on rails application.
 
 ## Features
 * Support for `.erb` and `.haml` files.

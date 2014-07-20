@@ -2,7 +2,7 @@
   "name": "rails-partials",
   "main": "./lib/rails-partials",
   "version": "0.3.0",
-  "description": "This package generates ruby on rails partials from selected text",
+  "description": "A package to generate ruby on rails partials from selected text",
   "activationEvents": [
     "rails-partials:generate"
   ],
