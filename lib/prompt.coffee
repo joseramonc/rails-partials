@@ -1,5 +1,6 @@
 {$, EditorView, View} = require 'atom'
 S = require 'string'
+fs = require 'fs-plus'
 
 noop = ->
 
@@ -11,9 +12,10 @@ class PromptView extends View
   @attach: -> new PromptView
 
   @content: ->
-    @div class: 'mini', =>
+    @div class: 'overlay from-top', =>
       @div class: 'rails-partials-prompt__input', =>
         @subview 'panelInput', new EditorView(mini: true)
+        @div class: 'error-message', outlet: 'errorMessage'
 
   initialize: () ->
     @panelEditor = @panelInput.getEditor()
@@ -32,7 +34,6 @@ class PromptView extends View
     # atom.workspaceView.append(this)
     atom.workspaceView.prependToBottom(this)
     @panelInput.focus()
-    @panelInput.setText('')
     @trigger 'attach'
     method(@delegate, 'show')()
 
@@ -40,8 +41,15 @@ class PromptView extends View
     @trigger 'confirm'
     text = @panelEditor.getText()
     #validation of text would go here...
-    method(@delegate, 'confirm')(text)
-    @detach()
+    directory = @delegate.fileDirectory(text)
+    fileName = @delegate.fileName(text)
+    partialName = "_#{fileName}.html#{@delegate.editorExtension()}"
+    fileFullPath = "#{directory}/#{partialName}"
+    unless fs.isFileSync(fileFullPath)
+      method(@delegate, 'confirm')(text)
+      @detach()
+    else
+      @showError 'File already exists'
 
   cancel: ->
     @trigger 'cancel'
@@ -49,6 +57,12 @@ class PromptView extends View
     @detach()
 
   detach: ->
+    @panelInput.setText('')
     super
+    @showError ''
     @trigger 'detach'
     method(@delegate, 'hide')()
+
+  showError: (message='') ->
+    @errorMessage.text(message)
+    @flashError() if message
