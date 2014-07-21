@@ -8,7 +8,7 @@ path = require 'path'
 # or `fdescribe`). Remove the `f` to unfocus the block.
 
 describe "RailsPartials", ->
-  [activationPromise, activeEditor] = []
+  [activationPromise, activeEditor, selection] = []
 
   beforeEach ->
     atom.workspaceView = new WorkspaceView()
@@ -17,12 +17,14 @@ describe "RailsPartials", ->
     activationPromise = atom.packages.activatePackage('rails-partials')
 
   describe "when the rails-partials:generate event is triggered", ->
-    it "attaches and then detaches the view", ->
-
+    it "attaches the prompt", ->
+      partialDialog = null
 
       waitsForPromise ->
         atom.workspace.open(__dirname + 'index.html.erb').then (layoutEditor) ->
           activeEditor = layoutEditor
+          activeEditor.setCursorScreenPosition([7, 5])
+          activeEditor.selectDown(2)
           atom.workspaceView.trigger 'rails-partials:generate'
 
       waitsForPromise ->
@@ -30,8 +32,10 @@ describe "RailsPartials", ->
 
       runs ->
         expect(atom.packages.isPackageActive('rails-partials')).toBe true
-        expect(atom.workspaceView.find('.rails-partials-prompt')).toExist()
-        expect(atom.workspaceView.find('.rails-partials-prompt')).toContain("Partial Name")
+        partialDialog = atom.workspaceView.find(".rails-partials-prompt").view()
+        expect(partialDialog).toExist()
+
+        # treeView = atom.workspaceView.find(".rails-partials-prompt").view()
         # atom.workspaceView.trigger 'rails-partials:generate'
       #   atom.workspaceView.trigger 'rails-partials:generate'
       #   expect(atom.workspaceView.find('.rails-partials')).toExist()
