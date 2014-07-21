@@ -1,8 +1,7 @@
 path = require 'path'
 S = require 'string'
 
-PromptView = require './prompt'
-prompt = new PromptView()
+RailsPartialsPromptView = require './prompt'
 RAILS_VIEWS_PATH = 'app/views'
 
 module.exports =
@@ -14,31 +13,34 @@ module.exports =
   generate: ->
     editor = atom.workspace.getActiveEditor()
     selection = editor.getSelection().getText()
-    prompt.show
-      label: 'Partial Name (No _ at the begginng or file extensions)',
+    new RailsPartialsPromptView(
+      label: 'Partial Name (No _ at the begginng or file extensions required)',
+      placeholder: 'partial name wihtout underscore and without extensions',
+      iconClass: 'icon-file-add',
       editor: editor,
-      removeUnusefulSymbols: @removeUnusefulSymbols,
       editorExtension: @editorExtension,
       renderInstruction: @renderInstruction,
       inputPath: @inputPath,
       fileDirectory: @fileDirectory,
-      fileName: @fileName,
-      editorView: editor.editorView,
+      getFileName: @getFileName,
+      partialName: @partialName,
+      removeUnusefulSymbols: @removeUnusefulSymbols,
+      partialFullPath: @partialFullPath,
       confirm: (input) ->
-        directory = @fileDirectory(input)
-        fileName = @fileName(input)
-        partialName = "_#{fileName}.html#{@editorExtension()}"
         editor.insertText(@renderInstruction(@inputPath(input)), autoIndent: true)
-        promise = atom.workspace.open "#{directory}/#{partialName}"
+        partialFullPath = @partialFullPath(input)
+        promise = atom.workspace.open(partialFullPath)
         promise.then (partialEditor) ->
           partialEditor.insertText(selection, autoIndent: true)
-          partialEditor.saveAs("#{directory}/#{partialName}")
+          partialEditor.saveAs(partialFullPath)
+    )
+
 
   fileDirectory: (input) ->
     if S(input).contains('/')
       # when input is a path we generate the file in
       # the RAILS_VIEWS_PATH direcotry + input
-      inputPath = S(input).chompLeft('/').chompRight('/').s #remove prefix and suffix '/'
+      inputPath = S(input).chompLeft('/').s #remove prefix '/'
       path.dirname(path.resolve(atom.project.path, RAILS_VIEWS_PATH, inputPath))
     else
       # generate file on the same directory
@@ -46,13 +48,22 @@ module.exports =
 
   inputPath: (input) ->
     if S(input).contains('/')
-      S(input).chompLeft('/').chompRight('/').s #remove prefix and suffix '/'
+      S(input).chompLeft('/').s #remove prefix '/'
     else
       input
 
-  fileName: (input) ->
+  partialName: (fileNameWithoutExtensions) ->
+    "_#{fileNameWithoutExtensions}.html#{@editorExtension()}"
+
+  partialFullPath: (input) ->
+    directory = @fileDirectory(input)
+    fileName = @getFileName(input)
+    partialName = @partialName(fileName)
+    return "#{directory}/#{partialName}"
+
+  getFileName: (input) ->
     if S(input).contains('/')
-      inputPath = S(input).chompLeft('/').chompRight('/').s #remove prefix and suffix '/'
+      inputPath = S(input).chompLeft('/').s #remove prefix '/'
       inputArray = S(input).parseCSV('/', null)
       fileName = inputArray.pop() # the last element is the file name
     else
