@@ -20,7 +20,7 @@ You can install the latest rails-partials version manually from console:
     npm install
     # Then restart Atom editor.
 
-![Demo](http://cl.ly/image/0b1j3t0c1T1k/railsdemo.gif)
+![Demo](http://cl.ly/image/0g0E3L222d30/railsdemo.gif)
 
 You can trigger the extension by:
 
