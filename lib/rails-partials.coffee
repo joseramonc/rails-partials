@@ -1,40 +1,37 @@
 path = require 'path'
 S = require 'string'
 
-RailsPartialsPromptView = require './prompt'
+Prompt = require './prompt'
 RAILS_VIEWS_PATH = 'app/views'
 
 module.exports =
   railsPartialsView: null
 
   activate: (state) ->
-    atom.workspaceView.command "rails-partials:generate", => @generate()
-
-  generate: ->
     editor = atom.workspace.getActiveEditor()
     selection = editor.getSelection().getText()
-    new RailsPartialsPromptView(
-      label: 'Partial Name (No _ at the begginng or file extensions required)',
-      placeholder: 'partial name wihtout underscore and without extensions',
-      iconClass: 'icon-file-add',
-      editor: editor,
-      editorExtension: @editorExtension,
-      renderInstruction: @renderInstruction,
-      inputPath: @inputPath,
-      fileDirectory: @fileDirectory,
-      getFileName: @getFileName,
-      partialName: @partialName,
-      removeUnusefulSymbols: @removeUnusefulSymbols,
-      partialFullPath: @partialFullPath,
-      confirm: (input) ->
-        editor.insertText(@renderInstruction(@inputPath(input)), autoIndent: true)
-        partialFullPath = @partialFullPath(input)
-        promise = atom.workspace.open(partialFullPath)
-        promise.then (partialEditor) ->
-          partialEditor.insertText(selection, autoIndent: true)
-          partialEditor.saveAs(partialFullPath)
-    )
+    atom.workspaceView.command "rails-partials:generate", => @showPrompt(state)
+    console.log 'activating'
 
+  showPrompt: (state) ->
+    @railsPartialsView = new Prompt(state.railsPartialsPromptState, @)
+
+  generate: (input, partialFullPath) ->
+    editor = atom.workspace.getActiveEditor()
+    selection = editor.getSelection().getText()
+    editor.insertText(@renderInstruction(@inputPath(input)), autoIndent: true)
+    promise = atom.workspace.open(partialFullPath)
+    promise.then (partialEditor) ->
+      partialEditor.insertText(selection, autoIndent: true)
+      partialEditor.saveAs(partialFullPath)
+
+  deactivate: ->
+    console.log 'deactiving'
+    @railsPartialsView.destroy()
+
+  serialize: ->
+    console.log 'requesting serailize view'
+    railsPartialsView: @railsPartialsView.serialize()
 
   fileDirectory: (input) ->
     if S(input).contains('/')
@@ -87,3 +84,9 @@ module.exports =
       "= render \"#{partialName}\""
     else
       "<%= render \"#{partialName}\" %>"
+
+  isDirectory: (input) ->
+    if input.slice(-1) == '/'
+      true
+    else
+      false
