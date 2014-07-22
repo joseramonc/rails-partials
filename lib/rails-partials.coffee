@@ -5,6 +5,9 @@ Prompt = require './prompt'
 RAILS_VIEWS_PATH = 'app/views'
 
 module.exports =
+  configDefaults:
+    showPartialInNewTab: true
+
   railsPartialsView: null
 
   activate: (state) ->
@@ -23,6 +26,8 @@ module.exports =
     promise.then (partialEditor) ->
       partialEditor.insertText(selection, autoIndent: true)
       partialEditor.saveAs(partialFullPath)
+      if !atom.config.get('rails-partials.showPartialInNewTab')
+        atom.workspace.destroyActivePaneItem() #close editor if preference is to not show the partial
 
   deactivate: ->
     @railsPartialsView.destroy()
