@@ -49,8 +49,10 @@ describe "RailsPartials", ->
               atom.workspaceView.trigger 'rails-partials:generate'
               partialPrompt = atom.workspaceView.find(".rails-partials-prompt").view()
               expect(partialPrompt).toExist()
-              partialPrompt.promptInput.insertText('awesome_erb_partial')
-              partialPrompt.trigger('core:confirm')
+
+          runs ->
+            partialPrompt.promptInput.insertText('awesome_erb_partial')
+            partialPrompt.trigger('core:confirm')
 
 
         it "puts the render instruction in file", ->
@@ -80,8 +82,10 @@ describe "RailsPartials", ->
             selection = mainEditor.getSelectedText()
             atom.workspaceView.trigger 'rails-partials:generate'
             partialPrompt = atom.workspaceView.find(".rails-partials-prompt").view()
-            partialPrompt.promptInput.insertText('shared/nested/partial')
-            partialPrompt.trigger('core:confirm')
+
+        runs ->
+          partialPrompt.promptInput.insertText('shared/nested/partial')
+          partialPrompt.trigger('core:confirm')
 
       it "generate the partial rendering the correct path", ->
         expect(mainEditor.getText()).toContain('<%= render "shared/nested/partial" %>')
@@ -112,8 +116,9 @@ describe "RailsPartials", ->
           mainEditor.setCursorScreenPosition([5, 4])
           atom.workspaceView.trigger 'rails-partials:generate'
           partialPrompt = atom.workspaceView.find(".rails-partials-prompt").view()
-          partialPrompt.promptInput.insertText('a/directory/path/')
-          partialPrompt.trigger('core:confirm')
+      runs ->
+        partialPrompt.promptInput.insertText('a/directory/path/')
+        partialPrompt.trigger('core:confirm')
 
       it "should display the directory error message", ->
         runs ->
