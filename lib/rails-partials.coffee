@@ -11,7 +11,6 @@ module.exports =
     editor = atom.workspace.getActiveEditor()
     selection = editor.getSelection().getText()
     atom.workspaceView.command "rails-partials:generate", => @showPrompt(state)
-    console.log 'activating'
 
   showPrompt: (state) ->
     @railsPartialsView = new Prompt(state.railsPartialsPromptState, @)
@@ -26,11 +25,9 @@ module.exports =
       partialEditor.saveAs(partialFullPath)
 
   deactivate: ->
-    console.log 'deactiving'
     @railsPartialsView.destroy()
 
   serialize: ->
-    console.log 'requesting serailize view'
     railsPartialsView: @railsPartialsView.serialize()
 
   fileDirectory: (input) ->

@@ -14,7 +14,6 @@ class RailsPartialsPromptView extends View
 
   initialize: (serializeState, railsPartials) ->
     @delegate = railsPartials
-    console.log 'initializing'
     @promptText.addClass 'icon-file-add'
     @editor = atom.workspace.getActiveEditor()
     @promptText.text "Partial Name (No _ at the begginng or file extensions required)"
