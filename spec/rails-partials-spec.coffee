@@ -65,6 +65,37 @@ describe "RailsPartials", ->
                 expect(secondErbEditor.getText()).toContain(selection)
                 fs.removeSync(secondErbEditor.getPath())
 
+      describe "when .haml extension", ->
+        [mainEditor, partialPrompt, selection] = []
+        beforeEach ->
+          mainEditor = null
+          partialPrompt = null
+
+          waitsForPromise ->
+            atom.workspace.open(__dirname + '/fixtures/index.html.haml').then (hamlEditor) ->
+              mainEditor = hamlEditor
+              mainEditor.setCursorScreenPosition([5, 6])
+              mainEditor.selectDown(3)
+              mainEditor.selectToEndOfLine()
+              selection = mainEditor.getSelectedText()
+              atom.workspaceView.trigger 'rails-partials:generate'
+              partialPrompt = atom.workspaceView.find(".rails-partials-prompt").view()
+              expect(partialPrompt).toExist()
+
+          runs ->
+            partialPrompt.promptInput.insertText('awesome_haml_partial')
+            partialPrompt.trigger('core:confirm')
+
+        it "puts the render instruction in file", ->
+          expect(mainEditor.getText()).toContain('= render "awesome_haml_partial"')
+
+        it "generates the partial with the correct name and in same directory", ->
+          runs ->
+            waitsForPromise ->
+              atom.workspace.open(__dirname + '/fixtures/_awesome_haml_partial.html.haml').then (secondHamlEditor) ->
+                expect(secondHamlEditor.getText()).toContain(selection)
+                fs.removeSync(secondHamlEditor.getPath())
+
 
     describe "when there's a input with directories", ->
       [mainEditor, partialEditor, selection, partialPrompt] = []
