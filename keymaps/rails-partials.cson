@@ -7,5 +7,7 @@
 
 # For more detailed documentation see
 # https://atom.io/docs/latest/advanced/keymaps
-'.editor:not(.mini)':
+'.platform-darwin .editor:not(.mini)':
   'ctrl-alt-p': 'rails-partials:generate'
+'.platform-win32 .editor:not(.mini), .platform-linux .editor:not(.mini)':
+  'shift-alt-p': 'rails-partials:generate'
