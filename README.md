@@ -27,8 +27,8 @@ You can trigger the extension by:
 
 * Right clicking with a selection and selecting the command (.gif)
 
-* <kbd>ctrl</kbd> + <kbd>alt</kbd> + <kbd>P</kbd>: The default keybinding (darwin), of course, which can be changed with your favorite for your simplicity.
+* <kbd>ctrl</kbd> + <kbd>alt</kbd> + <kbd>P</kbd>: The default keybinding (darwin), can be changed with your favorite for your simplicity.
 
-* <kbd>shift</kbd> + <kbd>alt</kbd> + <kbd>P</kbd>: The default keybinding (linux / windows), of course, which can be changed with your favorite for your simplicity.
+* <kbd>shift</kbd> + <kbd>alt</kbd> + <kbd>P</kbd>: The default keybinding (linux / windows), can be changed with your favorite for your simplicity.
 
 Please report any problems or suggestions at [issue tracker](https://github.com/joseramonc/rails-partials/issues/new).
