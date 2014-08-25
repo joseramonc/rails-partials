@@ -1,6 +1,8 @@
 # See https://atom.io/docs/latest/creating-a-package#menus for more details
 'context-menu':
-  '.overlayer':
+  '.html.erb':
+      'Generate partial from selection': 'rails-partials:generate'
+  '.haml':
       'Generate partial from selection': 'rails-partials:generate'
 
 'menu': [
