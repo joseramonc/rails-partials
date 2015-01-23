@@ -28,7 +28,7 @@ class RailsPartialsPromptView extends View
 
   destroy: ->
     @remove()
-    $('.editor').focus()
+    $('.atom-text-editor').focus()
 
   attach: ->
     # console.log 'attaching'
