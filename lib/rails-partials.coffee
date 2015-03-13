@@ -1,3 +1,4 @@
+{CompositeDisposable} = require 'atom'
 path = require 'path'
 S = require 'string'
 
@@ -11,9 +12,8 @@ module.exports =
   railsPartialsView: null
 
   activate: (state) ->
-    editor = atom.workspace.getActiveEditor()
-    selection = editor.getSelection().getText()
-    atom.workspaceView.command "rails-partials:generate", => @showPrompt(state)
+    @subscriptions = new CompositeDisposable
+    @subscriptions.add atom.commands.add 'atom-workspace', 'rails-partials:generate': => @showPrompt(state)
 
   showPrompt: (state) ->
     @railsPartialsView = new Prompt(state.railsPartialsPromptState, @)
@@ -40,7 +40,8 @@ module.exports =
       # when input is a path we generate the file in
       # the RAILS_VIEWS_PATH direcotry + input
       inputPath = S(input).chompLeft('/').s #remove prefix '/'
-      path.dirname(path.resolve(atom.project.path, RAILS_VIEWS_PATH, inputPath))
+      projectPath = atom.project.getPaths(atom.workspace.getActiveEditor())[0]
+      path.dirname(path.resolve(projectPath, RAILS_VIEWS_PATH, inputPath))
     else
       # generate file on the same directory
       path.dirname(atom.workspace.getActiveEditor().getPath())

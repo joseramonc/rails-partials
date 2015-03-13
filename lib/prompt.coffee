@@ -1,4 +1,4 @@
-{$, EditorView, View} = require 'atom'
+{$, TextEditorView, View} = require 'atom-space-pen-views'
 fs = require 'fs-plus'
 
 module.exports =
@@ -7,37 +7,34 @@ class RailsPartialsPromptView extends View
 
   @content: ->
     #rails-partials-prompt class is for specs
-    @div class: 'rails-partials-prompt overlay from-top', =>
-      @label class: 'icon', outlet: 'promptText'
-      @subview 'promptInput', new EditorView(mini: true)
+    @div class: 'rails-partials-prompt overlay', =>
+      @label outlet: 'promptText'
+      @subview 'promptInput', new TextEditorView(mini: true, placeholderText: 'layouts/navbar')
       @div class: 'error-message', outlet: 'errorMessage'
 
   initialize: (serializeState, railsPartials) ->
     @delegate = railsPartials
     @promptText.addClass 'icon-file-add'
     @editor = atom.workspace.getActiveEditor()
-    @promptText.text "Partial Name (No _ at the begginng or file extensions required)"
-    @promptInput.setPlaceholderText 'partial name wihtout underscore and without extensions'
+    @promptText.text 'partial name to be rendered'
     @attach()
-    @inputEditor = @promptInput.getEditor()
     @on 'core:confirm', => @confirm()
     @on 'core:cancel', => @destroy()
-    @promptInput.hiddenInput.on 'focusout', => @remove()
+    # @promptInput.hiddenInput.on 'focusout', => @remove()
 
   serialize: ->
 
   destroy: ->
     @remove()
-    $('.atom-text-editor').focus()
+    $('atom-text-editor').focus()
 
   attach: ->
     # console.log 'attaching'
-    @attached = true
-    atom.workspaceView.append(this)
+    atom.workspace.addTopPanel(item: @, visible: true)
     @promptInput.focus()
 
   confirm: ->
-    input = @inputEditor.getText()
+    input = @promptInput.getModel().getText()
     #validation of text would go here...
     valid = true
     if @delegate.isDirectory(input)
