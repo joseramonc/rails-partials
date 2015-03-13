@@ -20,7 +20,7 @@ class RailsPartialsPromptView extends View
     @attach()
     @on 'core:confirm', => @confirm()
     @on 'core:cancel', => @destroy()
-    @promptInput.hiddenInput.on 'focusout', => @remove()
+    @promptInput.on 'focusout', => @remove()
 
   serialize: ->
 
