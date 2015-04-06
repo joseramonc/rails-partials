@@ -15,8 +15,7 @@ class RailsPartialsPromptView extends View
   initialize: (serializeState, railsPartials) ->
     @delegate = railsPartials
     @promptText.addClass 'icon-file-add'
-    @editor = atom.workspace.getActiveTextEditor()
-    @promptText.text 'Name of the new partial.'
+    @promptText.text 'Name of the new partial'
     @attach()
     atom.commands.add '.rails-partials-prompt.overlay', 'core:confirm', => @confirm()
     atom.commands.add '.rails-partials-prompt.overlay', 'core:cancel', => @destroy()
@@ -48,6 +47,6 @@ class RailsPartialsPromptView extends View
       @delegate.generate(input, partialFullPath)
       @destroy()
 
-  showError: (message='') ->
+  showError: (message) ->
     @errorMessage.text(message)
-    @flashError() if message
+    @flashError()
