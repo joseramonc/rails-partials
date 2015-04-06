@@ -19,15 +19,16 @@ module.exports =
     @railsPartialsView = new Prompt(state.railsPartialsPromptState, @)
 
   generate: (input, partialFullPath) ->
-    editor = atom.workspace.getActiveEditor()
-    selection = editor.getSelection().getText()
+    editor = atom.workspace.getActiveTextEditor()
+    selection = editor.getLastSelection().getText()
     editor.insertText(@renderInstruction(@inputPath(input)), autoIndent: true)
     promise = atom.workspace.open(partialFullPath)
     promise.then (partialEditor) ->
       partialEditor.insertText(selection, autoIndent: true)
       partialEditor.saveAs(partialFullPath)
       if !atom.config.get('rails-partials.showPartialInNewTab')
-        atom.workspace.destroyActivePaneItem() #close editor if preference is to not show the partial
+        # close created editor if preference says so
+        atom.workspace.destroyActivePaneItem()
 
   deactivate: ->
     @railsPartialsView.destroy()
@@ -39,12 +40,12 @@ module.exports =
     if S(input).contains('/')
       # when input is a path we generate the file in
       # the RAILS_VIEWS_PATH direcotry + input
-      inputPath = S(input).chompLeft('/').s #remove prefix '/'
-      projectPath = atom.project.getPaths(atom.workspace.getActiveEditor())[0]
+      inputPath = S(input).chompLeft('/').s # remove prefix '/'
+      projectPath = atom.project.getPaths(atom.workspace.getActiveTextEditor())[0]
       path.dirname(path.resolve(projectPath, RAILS_VIEWS_PATH, inputPath))
     else
       # generate file on the same directory
-      path.dirname(atom.workspace.getActiveEditor().getPath())
+      path.dirname(atom.workspace.getActiveTextEditor().getPath())
 
   inputPath: (input) ->
     if S(input).contains('/')
@@ -71,7 +72,7 @@ module.exports =
     @removeUnusefulSymbols(fileName)
 
   editorExtension: ->
-    fileName = atom.workspace.getActiveEditor().getTitle()
+    fileName = atom.workspace.getActiveTextEditor().getTitle()
     path.extname fileName
 
   removeUnusefulSymbols: (fileName) ->

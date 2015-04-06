@@ -11,16 +11,6 @@ An [Atom package](https://atom.io/packages/rails-partials) to easily create part
 
 In Atom, open Preferences > Packages, search for rails-partials package. Once it found, click Install button to install package.
 
-## Manual installation
-
-You can install the latest rails-partials version manually from console:
-
-    cd ~/.atom/packages
-    git clone https://github.com/joseramonc/rails-partials
-    cd rails-partials
-    npm install
-    # Then restart Atom editor.
-
 ![Demo](http://cl.ly/image/0g0E3L222d30/railsdemo.gif)
 
 You can trigger the extension by:

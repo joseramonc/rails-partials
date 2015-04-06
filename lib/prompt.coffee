@@ -15,11 +15,11 @@ class RailsPartialsPromptView extends View
   initialize: (serializeState, railsPartials) ->
     @delegate = railsPartials
     @promptText.addClass 'icon-file-add'
-    @editor = atom.workspace.getActiveEditor()
-    @promptText.text 'partial name to be rendered'
+    @editor = atom.workspace.getActiveTextEditor()
+    @promptText.text 'Name of the new partial.'
     @attach()
-    @on 'core:confirm', => @confirm()
-    @on 'core:cancel', => @destroy()
+    atom.commands.add '.rails-partials-prompt.overlay', 'core:confirm', => @confirm()
+    atom.commands.add '.rails-partials-prompt.overlay', 'core:cancel', => @destroy()
     @promptInput.on 'focusout', => @remove()
 
   serialize: ->
