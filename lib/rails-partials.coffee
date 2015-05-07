@@ -6,8 +6,10 @@ Prompt = require './prompt'
 RAILS_VIEWS_PATH = 'app/views'
 
 module.exports =
-  configDefaults:
-    showPartialInNewTab: true
+  config:
+    showPartialInNewTab:
+      type: 'boolean'
+      default: true
 
   railsPartialsView: null
 

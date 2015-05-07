@@ -1,18 +1,10 @@
 # See https://atom.io/docs/latest/creating-a-package#menus for more details
 'context-menu':
-  '.html.erb':
-      'Generate partial from selection': 'rails-partials:generate'
-  '.haml':
-      'Generate partial from selection': 'rails-partials:generate'
-
-'menu': [
-  {
-    'label': 'Packages'
-    'submenu': [
-      'label': 'rails-partials'
+  'atom-text-editor': [
+    {
+      'label': 'Rails Partials'
       'submenu': [
         { 'label': 'Generate Partial', 'command': 'rails-partials:generate' }
       ]
-    ]
-  }
-]
+    }
+  ]
