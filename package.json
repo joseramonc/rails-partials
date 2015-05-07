@@ -1,10 +1,12 @@
 {
   "name": "rails-partials",
   "main": "./lib/rails-partials",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "This package generates ruby on rails partials from selected text",
   "activationCommands": {
-    "atom-text-editor": ["rails-partials:generate"]
+    "atom-text-editor": [
+      "rails-partials:generate"
+    ]
   },
   "repository": "https://github.com/joseramonc/rails-partials",
   "license": "MIT",
