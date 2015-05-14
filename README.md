@@ -1,4 +1,4 @@
-# rails-partials package [![Build Status](https://travis-ci.org/joseramonc/rails-partials.svg?branch=master)](https://travis-ci.org/joseramonc/rails-partials)
+# rails-partials package
 
 An [Atom package](https://atom.io/packages/rails-partials) to easily create partials for your ruby on rails application.
 
