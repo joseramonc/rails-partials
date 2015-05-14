@@ -55,22 +55,16 @@ class PromptHelper
       # generate file on the same directory
       path.dirname(atom.workspace.getActiveTextEditor().getPath())
 
-  # returns only the name, without any extension or container directories
+  # returns only the name
   @fileName: (input) ->
     inputArray = S(input).parseCSV('/', null) # split because input might be a path
     fileName = inputArray.pop() # the last element is the file name
-    @removeUnusefulSymbols(fileName)
-
-  @removeUnusefulSymbols: (fileName) ->
-    fileName = S(fileName).chompLeft '_' # remove starting underscore
-    # remove present known extensions
-    fileName = S(fileName).chompRight '.erb'
-    fileName = S(fileName).chompRight '.haml'
-    fileName = S(fileName).chompRight '.html'
-    fileName.s
 
   @partialName: (fileNameWithoutExtensions) ->
-    "_#{fileNameWithoutExtensions}.html#{@editorExtension()}"
+    if @editorExtension() is '.scss'
+      "_#{fileNameWithoutExtensions}#{@editorExtension()}"
+    else
+      "_#{fileNameWithoutExtensions}.html#{@editorExtension()}"
 
   @editorExtension: ->
     fileName = atom.workspace.getActiveTextEditor().getTitle()

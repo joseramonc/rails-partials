@@ -50,7 +50,6 @@ class RailsPartialsPromptView extends View
       valid = false
 
     if valid
-      console.log parameters
       @delegate.generate(fileNamePath, partialFullPath, parameters)
       @detach()
 

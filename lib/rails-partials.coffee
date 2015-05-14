@@ -51,7 +51,10 @@ module.exports =
 
     fileName = atom.workspace.getActiveTextEditor().getTitle()
     extension = path.extname(fileName)
-    if extension is '.haml'
+    if extension is '.scss'
+      # when scss add _ to partialName
+      "@import \"_#{partialName}\";"
+    else if extension is '.haml'
       "= render \"#{partialName}\"#{params}"
     else
       "<%= render \"#{partialName}\"#{params} %>"
