@@ -54,8 +54,7 @@ module.exports =
     extension = path.extname(fileName)
     switch extension
       when '.scss'
-        # when scss add _ to partialName
-        return "@import \"_#{partialName}\";"
+        return "@import \"#{partialName}\";"
       when '.haml'
         return "= render '#{partialName}'#{params}"
       when '.slim'
