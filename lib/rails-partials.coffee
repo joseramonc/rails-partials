@@ -2,6 +2,7 @@
 S = require 'string'
 Prompt = require './prompt'
 PromptHelper = require './prompt-helper'
+path = require 'path'
 
 module.exports =
   config:
@@ -51,10 +52,13 @@ module.exports =
 
     fileName = atom.workspace.getActiveTextEditor().getTitle()
     extension = path.extname(fileName)
-    if extension is '.scss'
-      # when scss add _ to partialName
-      "@import \"_#{partialName}\";"
-    else if extension is '.haml'
-      "= render \"#{partialName}\"#{params}"
-    else
-      "<%= render \"#{partialName}\"#{params} %>"
+    switch extension
+      when '.scss'
+        # when scss add _ to partialName
+        return "@import \"_#{partialName}\";"
+      when '.haml'
+        return "= render \"#{partialName}\"#{params}"
+      when '.slim'
+        return "== render \"#{partialName}\"#{params}"
+      else
+        return "<%= render \"#{partialName}\"#{params} %>"
