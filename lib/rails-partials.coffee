@@ -57,8 +57,8 @@ module.exports =
         # when scss add _ to partialName
         return "@import \"_#{partialName}\";"
       when '.haml'
-        return "= render \"#{partialName}\"#{params}"
+        return "= render '#{partialName}'#{params}"
       when '.slim'
-        return "== render \"#{partialName}\"#{params}"
+        return "== render '#{partialName}'#{params}"
       else
-        return "<%= render \"#{partialName}\"#{params} %>"
+        return "<%= render '#{partialName}'#{params} %>"
