@@ -18,8 +18,12 @@ module.exports =
   showPrompt: ->
     @prompt = new Prompt(@)
 
+  # expects:
+  #   input: 'shared/layout' or 'partial_name'
+  #   partialFullPath: '/Users/....../rails/app/views/layouts/_navbar.html.erb' as given by atom
+  #   parameters: 'f:f user:@user...'
   generate: (input, partialFullPath, parameters) ->
-    # cut and insert command in original file
+    # replace selection for command in original file
     editor = atom.workspace.getActiveTextEditor()
     selection = editor.getLastSelection().getText()
     editor.insertText(
@@ -32,6 +36,7 @@ module.exports =
 
     # create partial file with selected text
     selection = @refactorParameters(selection, parameters)
+    console.log selection
     promise = atom.workspace.open(partialFullPath)
     promise.then (partialEditor) ->
       partialEditor.insertText(selection, autoIndent: atom.config.get('editor.autoIndentOnPaste'))
@@ -48,35 +53,32 @@ module.exports =
 
   refactorParameters: (selection, parameters) ->
     return selection if parameters is null
-    refactoredSelection = []
+    refactoredSelection = selection
     parameters = S(parameters).parseCSV(' ', null)
-    # lines = S(selection).lines()
-    # console.log lines
     erbRegex = ///
       <%
         .* # match everything inside an erb block
       %>
-    ///
-    console.log "Regex: "
-    console.log selection.match(erbRegex)
+    ///g
+
+    erbBlocks = []
+    match = erbRegex.exec(selection)
+    while match isnt null
+      erbBlocks.push(match)
+      match = erbRegex.exec(selection)
+
     # we expect parameters to be of the form "var:@value var2:@value_2 var3:@va..."
-    # for param in parameters
-    #   refactorPair = S(param).parseCSV(':', null)
-    #   for line in lines
-    #     erbBlocks = line.match(erbRegex)
-    #     erbBlocks = [] if erbBlocks is null
-    #     console.log "Matching blocks: #{erbBlocks} in line #{line}"
-    #     # for every erb block in line
-    #     for block in erbBlocks
-    #       newBlock = S(block).replaceAll(refactorPair[1], refactorPair[0]).s
-    #       console.log "replacing #{block} for #{newBlock}"
-    #       refactoredSelection.push S(line).replaceAll(block, newBlock).s
-    console.log refactoredSelection
-    selection
+    for param in parameters
+      refactorPair = S(param).parseCSV(':', null)
+      for block in erbBlocks
+        newBlock = S(block).replaceAll(refactorPair[1], refactorPair[0]).s
+        console.log "replacing #{newBlock}"
+        refactoredSelection = S(refactoredSelection).replaceAll(block, newBlock).s
+    refactoredSelection
 
   renderInstruction: (partialName, parameters) ->
     params = ''
-    if parameters != null
+    if parameters isnt null
       # prepare params for instruction
       params = ", #{S(parameters).replaceAll(' ', ', ').s}"
       params = S(params).replaceAll(':', ': ').s

@@ -8,19 +8,29 @@ class PromptHelper
   constructor: () ->
 
   # returns the paramters to insert into partial
-  # input: "layouts/navbar user:@user page:'index'"
-  # output: "user:@user page:'index'"
+  # input: "layouts/navbar f user:@user"
+  # output: "f:f user:@user"
   @extractParameters: (input) ->
-    index = S(input).indexOf(' ')
-    params = input.substr(index, input.length)
-    params = S(params).chompLeft(' ').chompRight(' ').s
-    if S(params).contains(':')
-      params
-    else
+    input = S(input).chompRight(' ').chompLeft(' ').s
+    spaceIndex = S(input).indexOf(' ')
+    if spaceIndex < 0
       null
+    else
+      paramInput = input.substr(spaceIndex, input.length) # returns the parameter part of the input
+      paramInput = S(paramInput).chompLeft(' ').s # remove the first space of the params
+      params = S(paramInput).parseCSV(' ', null)
+      paramString = ''
+      for param in params
+        if S(param).contains(':')
+          paramKeyValue = param
+        else
+          paramKeyValue = "#{param}:#{param}"
+        paramString = "#{paramString} #{paramKeyValue}"
+        console.log paramString
+      return S(paramString).chompLeft(' ').s
 
   # returns only the file name or the file name
-  # input: "/layouts/navbar user:@user page:'index'"
+  # input: "/layouts/navbar f user:@user"
   # output: "layouts/navbar"
   @extractNamePath: (input) ->
     input = S(input).chompLeft('/').s
@@ -37,7 +47,7 @@ class PromptHelper
     else
       false
 
-  # returns the full path of the new partial, if
+  # returns the full path of the new partial
   @partialFullPath: (input) ->
     directory = @fileDirectory(input)
     fileName = @fileName(input)
