@@ -23,7 +23,7 @@ class PromptHelper
   # input: "/layouts/navbar user:@user page:'index'"
   # output: "layouts/navbar"
   @extractNamePath: (input) ->
-    input = S(input).chompLeft('/')
+    input = S(input).chompLeft('/').s
     if S(input).contains(' ')
       spaceIndex = S(input).indexOf(' ')
       S(input).substr(0, spaceIndex).s
