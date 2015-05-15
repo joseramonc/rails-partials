@@ -55,6 +55,8 @@ module.exports =
     switch extension
       when '.scss'
         return "@import \"#{partialName}\";"
+      when '.sass'
+        return "@import #{partialName}"
       when '.haml'
         return "= render '#{partialName}'#{params}"
       when '.slim'

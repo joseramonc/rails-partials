@@ -4,7 +4,7 @@ An [Atom package](https://atom.io/packages/rails-partials) to easily create part
 
 ## Features
 * Support for `.erb`, `.haml` and `.slim` files.
-* Support for `.scss` files.
+* Support for `.scss` and `.sass` files.
 * Support for partials in other directories, when a partial is created with a name with slashes for example 'shared/footer', the partial is going to be created at `app/views/shared/_footer.html.yourext`
 * Support to send parameters into partials, 'shared/footer user:@user var:@var' generates <%= render 'shared/footer', user: @user, var: @var %>
 * Configuration to show or not show the generated partial in a new tab (defaults to true)
