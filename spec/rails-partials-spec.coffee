@@ -12,7 +12,6 @@ describe "RailsPartials", ->
   [editor, editorElement] = []
 
   beforeEach ->
-    atom.workspaceView = new WorkspaceView()
 
     waitsForPromise ->
       atom.workspace.open('index.html.erb')

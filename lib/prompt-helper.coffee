@@ -61,7 +61,7 @@ class PromptHelper
     fileName = inputArray.pop() # the last element is the file name
 
   @partialName: (fileNameWithoutExtensions) ->
-    if @editorExtension() is '.scss'
+    if @editorExtension() in ['.scss', '.sass']
       "_#{fileNameWithoutExtensions}#{@editorExtension()}"
     else
       "_#{fileNameWithoutExtensions}.html#{@editorExtension()}"
