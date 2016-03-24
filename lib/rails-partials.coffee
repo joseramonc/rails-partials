@@ -8,6 +8,10 @@ module.exports =
     showPartialInNewTab:
       type: 'boolean'
       default: true
+    quoteStyle:
+      type: 'string'
+      default: 'single'
+      enum: ['single', 'double']
 
   prompt: null
 
@@ -91,8 +95,13 @@ module.exports =
       when '.sass'
         return "@import #{partialName}"
       when '.haml'
-        return "= render '#{partialName}'#{params}"
+        return "= render #{@quote partialName}#{params}"
       when '.slim'
-        return "== render '#{partialName}'#{params}"
+        return "== render #{@quote partialName}#{params}"
       else
-        return "<%= render '#{partialName}'#{params} %>"
+        return "<%= render #{@quote partialName}#{params} %>"
+
+  quote: (string) ->
+    style = atom.config.get('rails-partials.quoteStyle')
+    quoteChar = if style is 'double' then '\"' else '\''
+    "#{quoteChar}#{string}#{quoteChar}"
