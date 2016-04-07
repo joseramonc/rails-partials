@@ -55,6 +55,8 @@ module.exports =
   serialize: ->
     prompt: null
 
+  # selection: text to be inserted in the new partial
+  # parameters: parameters to be added to the render instruction, ex: "ff:f"
   refactorParameters: (selection, parameters) ->
     return selection if parameters is null
     refactoredSelection = selection
@@ -65,6 +67,7 @@ module.exports =
       %>
     ///g
 
+    # gather erb blocks where we have to replace
     erbBlocks = []
     match = erbRegex.exec(selection)
     while match isnt null
@@ -75,8 +78,7 @@ module.exports =
     for param in parameters
       refactorPair = S(param).parseCSV(':', null)
       for block in erbBlocks
-        newBlock = S(block).replaceAll(refactorPair[1], refactorPair[0]).s
-        console.log "replacing #{newBlock}"
+        newBlock = S(block).replaceAll(refactorPair[0], refactorPair[1]).s
         refactoredSelection = S(refactoredSelection).replaceAll(block, newBlock).s
     refactoredSelection
 
