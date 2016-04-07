@@ -1,7 +1,7 @@
 {
   "name": "rails-partials",
   "main": "./lib/rails-partials",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "This package generates ruby on rails partials from selected text",
   "activationCommands": {
     "atom-text-editor": [
