@@ -78,7 +78,7 @@ module.exports =
     for param in parameters
       refactorPair = S(param).parseCSV(':', null)
       for block in erbBlocks
-        newBlock = S(block).replaceAll(refactorPair[0], refactorPair[1]).s
+        newBlock = S(block).replaceAll(refactorPair[1], refactorPair[0]).s
         refactoredSelection = S(refactoredSelection).replaceAll(block, newBlock).s
     refactoredSelection
 
