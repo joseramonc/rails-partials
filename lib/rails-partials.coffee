@@ -40,7 +40,6 @@ module.exports =
 
     # create partial file with selected text
     selection = @refactorParameters(selection, parameters)
-    console.log selection
     promise = atom.workspace.open(partialFullPath)
     promise.then (partialEditor) ->
       partialEditor.insertText(selection, autoIndent: atom.config.get('editor.autoIndentOnPaste'))
